@@ -1,4 +1,4 @@
-package main.java;
+package main.java.largest.sub.array;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,36 +13,22 @@ import java.util.Scanner;
  * Subarrays of array a = [1, 2, 3] are [1], [1, 2], [1, 2, 3], [2], [2, 3], and [3].
  */
 public class LongestSubArray {
+    private int longestSubArray;
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public LongestSubArray(int[] a, int k) {
+        longestSubArray = 0;
 
-        URL filePath = LongestSubArray.class.getResource("../resources/LongestSubArray.txt");
-
-        if(filePath != null) {
-            Scanner scan = new Scanner(new File(filePath.getFile()));
-
-            int N = scan.nextInt();
-            int[] a = new int[N];
-
-            int i = 0;
-            while(i < N) {
-                a[i++] = scan.nextInt();
-            }
-
-            int k = scan.nextInt();
-            scan.close();
-
-            LongestSubArray longestSubArray = new LongestSubArray();
-            System.out.println("Longest Subarray: " + longestSubArray.maxLength(a, k));
-
-        } else {
-            System.out.println("Could not find file.");
-        }
-
+        maxLength(a, k);
     }
 
-    public int maxLength(int[] a, int k) {
-        int longestSubArray = 0;
+    public int getLongestSubArray() {
+        return longestSubArray;
+    }
+
+    /*
+        Returns maximum length of sub array that is less than or equal to k.
+    */
+    private int maxLength(int[] a, int k) {
         for(int i = 0; i < a.length; i++) {
             // if int at index i is greater than k, then there is no reason to check the sub arrays at that index
             if(a[i] > k) {
@@ -67,7 +53,7 @@ public class LongestSubArray {
     }
 
     /*
-        sub array sum must be less than or equal to k to return true
+        Sub array sum must be less than or equal to k to return true.
      */
     private boolean isSubArraySumWithinRange(int[] a, int index, int limit, int k) {
         int sum = 0;
@@ -78,6 +64,33 @@ public class LongestSubArray {
         }
 
         return isWithinRange;
+    }
+
+    public static void main(String[] args) throws FileNotFoundException {
+
+        URL filePath = LongestSubArray.class.getResource("../../../../resources/LongestSubArray.txt");
+
+        if(filePath != null) {
+            Scanner scan = new Scanner(new File(filePath.getFile()));
+
+            int N = scan.nextInt();
+            int[] a = new int[N];
+
+            int i = 0;
+            while(i < N) {
+                a[i++] = scan.nextInt();
+            }
+
+            int k = scan.nextInt();
+            scan.close();
+
+            LongestSubArray longestSubArray = new LongestSubArray(a, k);
+            System.out.println("Longest Subarray: " + longestSubArray.getLongestSubArray());
+
+        } else {
+            System.out.println("Could not find file.");
+        }
+
     }
 }
 
