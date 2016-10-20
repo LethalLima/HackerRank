@@ -30,9 +30,13 @@ public class LongestSubArray {
             }
 
             int k = scan.nextInt();
+            scan.close();
 
             LongestSubArray longestSubArray = new LongestSubArray();
             System.out.println("Longest Subarray: " + longestSubArray.maxLength(a, k));
+
+        } else {
+            System.out.println("Could not find file.");
         }
 
     }
