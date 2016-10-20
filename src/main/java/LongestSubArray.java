@@ -1,31 +1,59 @@
 package main.java;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.Scanner;
+
 /**
  * Created by LethalLima on 10/18/16.
+ * Challenge: Longest Subarray
+ * Goal: Return the length of the longest subarray having elements that sum to a number than
+ * or equal to k. You CANNOT reorder the array's elements.
+ * Subarrays of array a = [1, 2, 3] are [1], [1, 2], [1, 2, 3], [2], [2, 3], and [3].
  */
 public class LongestSubArray {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
 
-        LongestSubArray longestSubArray = new LongestSubArray();
+        URL filePath = LongestSubArray.class.getResource("../resources/LongestSubArray.txt");
 
-        int[] a = {1, 2, 3};
-        int k = 6;
+        if(filePath != null) {
+            Scanner scan = new Scanner(new File(filePath.getFile()));
 
-        System.out.println("Longest Subarray: " + longestSubArray.maxLength(a, k));
+            int N = scan.nextInt();
+            int[] a = new int[N];
+
+            int i = 0;
+            while(i < N) {
+                a[i++] = scan.nextInt();
+            }
+
+            int k = scan.nextInt();
+
+            LongestSubArray longestSubArray = new LongestSubArray();
+            System.out.println("Longest Subarray: " + longestSubArray.maxLength(a, k));
+        }
 
     }
 
     public int maxLength(int[] a, int k) {
         int longestSubArray = 0;
         for(int i = 0; i < a.length; i++) {
-            // if index (i) is greater than k, then there is no reason to check the sub arrays at that index
+            // if int at index i is greater than k, then there is no reason to check the sub arrays at that index
             if(a[i] > k) {
                 continue;
             }
-            // check sub arrays at this index i
+            // check sub arrays for each index i unless longestSubArray is
+            // already larger than current subarray we're checking
+            // i + j <= a.length must be true to prevent ArrayIndexOutOfBoundsException
             for(int j = 1; i + j <= a.length; j++) {
-                if(isSubArraySumWithinRange(a, i, i + j, k) && longestSubArray < j) {
+                // there is no reason to test whether sub array is less than equal to k
+                // if that size sub array or less is already computed and stored, then continue
+                if(longestSubArray >= j)
+                    continue;
+
+                if(isSubArraySumWithinRange(a, i, i + j, k)) {
                     longestSubArray = j;
                 }
             }
@@ -34,15 +62,18 @@ public class LongestSubArray {
         return longestSubArray;
     }
 
+    /*
+        sub array sum must be less than or equal to k to return true
+     */
     private boolean isSubArraySumWithinRange(int[] a, int index, int limit, int k) {
         int sum = 0;
-        boolean flag = true;
-        for(int i = index; flag && i < limit; i++) {
+        boolean isWithinRange = true;
+        for(int i = index; isWithinRange && i < limit; i++) {
             if((sum += a[i]) > k)
-                flag = false;
+                isWithinRange = false;
         }
 
-        return flag;
+        return isWithinRange;
     }
 }
 
